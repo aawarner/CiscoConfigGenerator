@@ -1,0 +1,164 @@
+version 16.6
+service timestamps debug datetime msec
+service timestamps log datetime msec
+service password-encryption
+platform qfp utilization monitor load 80
+no platform punt-keepalive disable-kernel-core
+platform hardware throughput level 75000
+!
+hostname {{hostname}}
+!
+boot-start-marker
+boot-end-marker
+!
+!
+logging buffered 16384 informational
+!
+no aaa new-model
+!
+no ip bootp server
+ip name-server {{dns_server}}
+no ip domain lookup
+ip domain name {{domain_name}}
+ip dhcp excluded-address {{dhcp_excluded}}
+!
+ip dhcp pool {{dhcp_pool_name}}
+ network {{dhcp_pool_net}} {{dhcp_pool_mask}}
+ default-router {{dhcp_router}}
+ dns-server {{dhcp_dns_server}}
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+subscriber templating
+!
+!
+!
+!
+!
+!
+!
+multilink bundle-name authenticated
+!
+!
+!
+!
+!
+!
+!
+license accept end user agreement
+license boot level securityk9
+diagnostic bootup level minimal
+spanning-tree extend system-id
+!
+!
+!
+username {{user}} privilege {{priv}} secret {{pass}}
+!
+redundancy
+ mode none
+!
+!
+!
+vlan internal allocation policy ascending
+!
+no cdp run
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+!
+interface Loopback0
+ ip address {{loopback0_address}} {{loopback0_mask}}
+ ip ospf 1 area 0
+!
+interface Tunnel0
+ description {{tunnel0_description}}
+ ip unnumbered Loopback0
+ ip ospf 1 area 0
+ tunnel source GigabitEthernet0/0/0
+ tunnel mode ipsec ipv4
+ tunnel destination {{tunnel0_destination}}
+ tunnel path-mtu-discovery
+!
+interface GigabitEthernet0/0/0
+ description {{g0_description}}
+ ip address dhcp
+ no ip redirects
+ no ip unreachables
+ no ip proxy-arp
+ load-interval 30
+ negotiation auto
+!
+interface GigabitEthernet0/0/1
+ description {{g1_description}}
+ ip address {{g1_address}} {{g1_mask}}
+ ip ospf 1 area 0
+ negotiation auto
+!
+interface GigabitEthernet0/1/0
+!
+interface GigabitEthernet0/1/1
+!
+interface GigabitEthernet0/1/2
+!
+interface GigabitEthernet0/1/3
+!
+interface GigabitEthernet0/1/4
+!
+interface GigabitEthernet0/1/5
+!
+interface GigabitEthernet0/1/6
+!
+interface GigabitEthernet0/1/7
+!
+interface Vlan1
+ no ip address
+!
+!
+router ospf 1
+ passive-interface GigabitEthernet0/0/0
+!
+ip forward-protocol nd
+no ip http server
+no ip http secure-server
+!
+ip route {{tunnel0_destination}} 255.255.255.255 dhcp
+!
+ip ssh version 2
+!
+!
+!
+!
+!
+control-plane
+!
+!
+line con 0
+ transport input none
+ stopbits 1
+line vty 0 4
+ login local
+ transport input ssh
+!
+!
+!
+end
