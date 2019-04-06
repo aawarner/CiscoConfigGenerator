@@ -71,13 +71,15 @@ def config():
         f = open(os.path.join(output_directory, p['hostname'] + ".config"), "w")
         f.write(result)
         f.close()
-        print("Configuration '%s' created..." % (p['hostname'] + ".config"))
     path = "configs/"
     with open(os.path.join(path, hostname + ".config")) as fp:
-        v = fp.read()
-    hl = ("Configuration for " + hostname + " created. Check configs directory for router1.config file.\n" + v)
+        v = fp.read().splitlines()
+        for i in v:
+            line = i.rstrip("\n")
+            print(line)
+    hl = ("Configuration for " + hostname + " created. Check configs directory for " + hostname + ".config file.\n")
     return hl
+
 
 if __name__ == '__main__':
     app.run()
-
