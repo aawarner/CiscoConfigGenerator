@@ -1,11 +1,15 @@
 import jinja2
 import os
-from flask import Flask, render_template, request, redirect
+from flask import Flask, render_template, request, redirect, url_for, flash, send_file
 app = Flask(__name__)
 
 @app.route("/")
 def webroot():
-    return render_template('index.html')
+    return render_template("index.html")
+
+@app.route("/success", methods = ["GET"])
+def success():
+    return render_template("success.html")
 
 @app.route("/config", methods = ["POST"])
 def config():
@@ -71,15 +75,7 @@ def config():
         f = open(os.path.join(output_directory, p['hostname'] + ".config"), "w")
         f.write(result)
         f.close()
-    path = "configs/"
-    with open(os.path.join(path, hostname + ".config")) as fp:
-        v = fp.read().splitlines()
-        for i in v:
-            line = i.rstrip("\n")
-            print(line)
-    hl = ("Configuration for " + hostname + " created. Check configs directory for " + hostname + ".config file.\n")
-    return hl
-
+    return redirect(url_for("success"))
 
 if __name__ == '__main__':
     app.run()
