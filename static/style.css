@@ -31,3 +31,6 @@ input[type=submit]:hover {
   background-color: #f2f2f2;
   padding: 20px;
 }
+label {
+  font : 1.2em "Arial", sans-serif;
+}
