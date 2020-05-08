@@ -11,8 +11,6 @@ Once the web server has started open a web browser and proceed to
 
 The following web page will be displayed.
 
-*Insert Webpage photo here
-
 Once all pertinent information has been filled in click submit.
 The configuration will be found in the ~/configs directory.
 
